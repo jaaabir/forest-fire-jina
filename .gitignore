@@ -1,2 +1,5 @@
 # images
 images/
+
+# pycatch
+__pycache__/

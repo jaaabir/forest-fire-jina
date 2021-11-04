@@ -24,7 +24,7 @@ class Classify(Executor):
         pass
 
 flow = (
-    Flow(cors = True, protocol = 'http', install_requirements=True)
+    Flow(cors = True, protocol = 'http', install_requirements=True, port_expose = 12344)
     .add(
         name = 'image_normalizer',
         uses ='jinahub://ImageNormalizer',
@@ -43,10 +43,7 @@ flow = (
     # )
 )
 
-doc = Document(uri= 'images/apple.png')
-doc.convert_image_uri_to_blob()
-testing = DocumentArray([doc])
-# docs = get_docs()
+testing = DocumentArray([])
 
 with flow as f:
     f.post(
