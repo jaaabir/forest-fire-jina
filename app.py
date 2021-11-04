@@ -149,6 +149,9 @@ def main():
 
 
 if __name__ == '__main__':
+    if 'images' not in os.listdir():
+        os.mkdir('images')
+        
     if st._is_running_with_streamlit:
         main()
     else:
