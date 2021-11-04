@@ -1,3 +1,4 @@
+import enum
 import streamlit as st
 from PIL import Image
 import numpy as np
@@ -17,37 +18,39 @@ st.write('''
 def get_docs(img_names) -> DocumentArray:
     folder = 'images'
     try:
-        images = [Document(uri = f"{folder}/{i}") for i in img_names]
+        images = [Document(uri=f"{folder}/{i}") for i in img_names]
         docs = DocumentArray()
-    
+
         for doc in images:
             doc.convert_uri_to_image_blob()
-            docs.append(doc) 
+            docs.append(doc)
     except:
         docs = DocumentArray()
 
     return docs
 
+
 def send_request(img_names) -> DocumentArray:
-    c = Client(port = 12344, protocol = 'http', host = 'localhost')
+    c = Client(port=12344, protocol='http', host='localhost')
     docs = get_docs(img_names)
     if len(docs) > 0:
         res = c.post(
-            on = '/search',
-            inputs = docs,
-            return_results = True,
-            on_done = print
+            on='/search',
+            inputs=docs,
+            return_results=True,
+            on_done=print
         )
     else:
         res = -1
     return res
+
 
 def load_img(img_file):
     img = Image.open(img_file)
     return img
 
 
-def remove_images(img_names = None):
+def remove_images(img_names=None):
     folder = 'images'
     img_names = os.listdir(folder) if not img_names else img_names
     for img in img_names:
@@ -61,7 +64,8 @@ def main():
 
     menu = ["Upload Images", "Predicted Images", "API documention", "About"]
     choice = st.sidebar.selectbox("Menu", menu)
-    session_state = SessionState.get(docs = None, remove_imgs = False, uploaded_imgs = [])
+    session_state = SessionState.get(
+        docs=None, remove_imgs=False, uploaded_imgs=[])
 
     if choice == "Upload Images":
         st.subheader('Upload Images : ')
@@ -87,28 +91,41 @@ def main():
                     }
                     </style>
                     <p class='pi'>Go to Predicted Images section</p>
-                    ''', unsafe_allow_html= True)
+                    ''', unsafe_allow_html=True)
                 my_bar.progress(100)
             if st.button('Remove Images'):
                 session_state.remove_imgs = True
 
-        if img_files:
-            for img_file in img_files:
+        col1 = st.container()
+        col2 = st.container()
+        col3 = st.container()
 
-                st.image(load_img(img_file))
+        col1, col2, col3 = st.columns(3)
+        cols = {
+            'col1': col1,
+            'col2': col2,
+            'col3': col3
+        }
+
+        if img_files:
+            for i, img_file in enumerate(img_files):
+
+                ind = (i % 3)+1
+
+                with cols[f'col{ind}']:
+                    st.image(load_img(img_file))
 
                 with open(os.path.join("images", img_file.name), "wb") as f:
                     img_buffer = (img_file).getbuffer()
                     f.write(img_buffer)
+
             st.success("File Saved")
-    
+
         if session_state.remove_imgs:
             remove_images(session_state.uploaded_imgs)
             session_state.uploaded_imgs = []
             session_state.remove_imgs = False
 
-
-    
     elif choice == "Predicted Images":
         st.subheader("Predicted Images :")
         st.markdown('---')
