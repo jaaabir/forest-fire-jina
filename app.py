@@ -52,7 +52,6 @@ def remove_images(img_names=None):
     folder = 'images'
     img_names = os.listdir(folder) if not img_names else img_names
     for img in img_names:
-        # fname = f'{folder}/{img}'
         fname = os.path.join("images", img)
         os.remove(fname)
 
@@ -132,6 +131,7 @@ def main():
             st.warning(
                 'You forgot to remove the images !!! But we did it for you.')
             remove_images(session_state.uploaded_imgs)
+            session_state.uploaded_imgs = []
 
         st.write(session_state.docs)
 
