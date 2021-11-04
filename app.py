@@ -1,14 +1,12 @@
-import enum
+from jina import DocumentArray, Document, Client
+from streamlit import cli as stcli
+from about import Contents
 import streamlit as st
 from PIL import Image
-import numpy as np
-import os
-from jina import DocumentArray, Document, Client
-import re
-import sys
-from streamlit import cli as stcli
 import SessionState
-# from test import remove_images
+import sys
+import os
+
 
 st.write('''
     # Forest Fire Detection
@@ -54,10 +52,11 @@ def remove_images(img_names=None):
     folder = 'images'
     img_names = os.listdir(folder) if not img_names else img_names
     for img in img_names:
-        fname = f'{folder}/{img}'
+        # fname = f'{folder}/{img}'
+        fname = os.path.join("images", img)
         os.remove(fname)
 
-    print('removed the images ...')
+    print('Removed the images ...')
 
 
 def main():
@@ -80,7 +79,7 @@ def main():
                 my_bar.progress(25)
                 session_state.docs = send_request(session_state.uploaded_imgs)
                 if session_state.docs == -1:
-                    st.error('you removed the imaged before detecting ...')
+                    st.error('You removed the images before detecting ...')
                 else:
                     st.markdown('''
                     <style>
@@ -130,7 +129,8 @@ def main():
         st.subheader("Predicted Images :")
         st.markdown('---')
         if len(session_state.uploaded_imgs) > 0:
-            st.warning('you forgot to remove the images !!!')
+            st.warning(
+                'You forgot to remove the images !!! But we did it for you.')
             remove_images(session_state.uploaded_imgs)
 
         st.write(session_state.docs)
@@ -138,20 +138,18 @@ def main():
     elif choice == "API documention":
         st.subheader("API documention :")
         st.markdown('---')
+        st.markdown('**Coming Soon ...**')
 
     elif choice == "About":
         st.subheader("About : ")
         st.markdown('---')
-
-        st.markdown('''
-        ##### This is a project made to detect forest fires using Jina AI.
-        ''')
+        st.markdown(Contents, unsafe_allow_html=True)
 
 
 if __name__ == '__main__':
     if 'images' not in os.listdir():
         os.mkdir('images')
-        
+
     if st._is_running_with_streamlit:
         main()
     else:

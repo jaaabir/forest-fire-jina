@@ -38,7 +38,7 @@ ipython-genutils @ file:///tmp/build/80754af9/ipython_genutils_1606773439826/wor
 ipywidgets @ file:///tmp/build/80754af9/ipywidgets_1610481889018/work
 itsdangerous==2.0.1
 jedi @ file:///tmp/build/80754af9/jedi_1611333729159/work
-jina==2.1.5
+jina==2.2.4
 jina-commons @ git+https://github.com/jina-ai/jina-commons.git@1801bb497749f7f8ead284701ada9d0969ff2a3e
 Jinja2 @ file:///tmp/build/80754af9/jinja2_1624781299557/work
 joblib==1.0.1
@@ -104,6 +104,7 @@ Send2Trash @ file:///tmp/build/80754af9/send2trash_1632406701022/work
 sip==4.19.13
 six @ file:///tmp/build/80754af9/six_1623709665295/work
 starlette==0.14.2
+streamlit==1.1.0
 terminado==0.9.4
 testpath @ file:///tmp/build/80754af9/testpath_1624638946665/work
 tokenizers==0.10.3
