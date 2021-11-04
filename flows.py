@@ -24,19 +24,19 @@ class Classify(Executor):
         pass
 
 flow = (
-    Flow(cors = True, protocol = 'http', port_expose = 12345)
+    Flow(cors = True, protocol = 'http', install_requirements=True)
     .add(
         name = 'image_normalizer',
-        uses ='jinahub://ImageNormalizer'
+        uses ='jinahub://ImageNormalizer',
     )
     .add(
         name = 'image_noice_remover',
         uses = ImageCleaner
     )
-    # .add(
-    #     name = 'image_segmenter',
-    #     uses = 'jinahub://YoloV5Segmenter'
-    # )
+    .add(
+        name = 'image_segmenter',
+        uses = 'jinahub://YoloV5Segmenter',
+    )
     # .add(
     #     name = 'fire_detector',
     #     uses = Classify
