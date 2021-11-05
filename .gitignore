@@ -3,3 +3,6 @@ images/
 
 # pycatch
 __pycache__/
+
+# model
+model_dnet121.h5
