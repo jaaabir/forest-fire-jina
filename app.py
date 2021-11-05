@@ -1,3 +1,4 @@
+from typing import Literal
 from jina import DocumentArray, Document, Client
 from streamlit import cli as stcli
 from about import Contents
@@ -6,6 +7,10 @@ from PIL import Image
 import SessionState
 import sys
 import os
+from io import BytesIO
+import matplotlib.pyplot as plt
+import numpy as np
+import cv2
 
 
 st.write('''
@@ -29,14 +34,14 @@ def get_docs(img_names) -> DocumentArray:
 
 
 def send_request(img_names) -> DocumentArray:
-    c = Client(port=12344, protocol='http', host='localhost')
+    c = Client(port=55805, protocol='http', host='localhost')
     docs = get_docs(img_names)
     if len(docs) > 0:
         res = c.post(
             on='/search',
             inputs=docs,
             return_results=True,
-            on_done=print
+            on_done= print
         )
     else:
         res = -1
@@ -111,6 +116,7 @@ def main():
                 ind = (i % 3)+1
 
                 with cols[f'col{ind}']:
+                    print(img_file)
                     st.image(load_img(img_file))
 
                 with open(os.path.join("images", img_file.name), "wb") as f:
@@ -133,7 +139,74 @@ def main():
             remove_images(session_state.uploaded_imgs)
             session_state.uploaded_imgs = []
 
-        st.write(session_state.docs)
+        fire = DocumentArray()
+        no_fire = DocumentArray()
+        docs =  session_state.docs
+        if docs:
+
+            for doc in docs:
+                print(f"image class is {doc.docs[0].tags['class']}")
+                if doc.docs[0].tags['class'] == '0':
+                    no_fire.append(doc.docs[0])
+                else:
+                    fire.append(doc.docs[0])
+
+        st.markdown('''
+        
+        ```
+        Fire
+        ``` 
+
+        ''')
+
+        col1 = st.container()
+        col2 = st.container()
+        col3 = st.container()
+
+        col1, col2, col3 = st.columns(3)
+        cols = {
+            'col1': col1,
+            'col2': col2,
+            'col3': col3
+        }
+
+        if fire:
+            for i, img_file in enumerate(fire):
+
+                ind = (i % 3)+1
+
+                with cols[f'col{ind}']:
+                    st.image(Image.fromarray(img_file.blob))
+
+
+        st.markdown('---')
+        st.markdown('''
+        
+        ```
+        No Fire 
+        ```
+
+        ''')
+
+        col1 = st.container()
+        col2 = st.container()
+        col3 = st.container()
+
+        col1, col2, col3 = st.columns(3)
+        cols = {
+            'col1': col1,
+            'col2': col2,
+            'col3': col3
+        }
+
+        if no_fire:
+            for i, img_file in enumerate(no_fire):
+
+                # ind = (i % 3)+1
+
+                # with cols[f'col{ind}']:
+                #     st.image(Image.fromarray(img_file.blob))
+                st.image(Image.fromarray(img_file.blob))
 
     elif choice == "API documention":
         st.subheader("API documention :")
@@ -155,3 +228,6 @@ if __name__ == '__main__':
     else:
         sys.argv = ["streamlit", "run", sys.argv[0]]
         sys.exit(stcli.main())
+
+
+
