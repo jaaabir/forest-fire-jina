@@ -1,4 +1,3 @@
-from typing import Literal
 from jina import DocumentArray, Document, Client
 from streamlit import cli as stcli
 from about import Contents
@@ -7,10 +6,6 @@ from PIL import Image
 import SessionState
 import sys
 import os
-from io import BytesIO
-import matplotlib.pyplot as plt
-import numpy as np
-import cv2
 
 
 st.write('''
