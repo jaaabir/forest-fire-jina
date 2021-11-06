@@ -45,7 +45,7 @@ class Classify(Executor):
         
 
 flow = (
-    Flow(cors = True, protocol = 'http', install_requirements=True)
+    Flow(cors = True, protocol = 'http', install_requirements=True, port_expose = 12345)
     .add(
         name = 'fire_detector',
         uses = Classify

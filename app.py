@@ -34,7 +34,7 @@ def get_docs(img_names) -> DocumentArray:
 
 
 def send_request(img_names) -> DocumentArray:
-    c = Client(port=55787, protocol='http', host='localhost')
+    c = Client(port= 12345, protocol='http', host='localhost')
     docs = get_docs(img_names)
     if len(docs) > 0:
         res = c.post(
@@ -143,14 +143,17 @@ def main():
         no_fire = DocumentArray()
         docs =  session_state.docs
         if docs:
-
-            print('length of the docs is : ' , len(docs[0].docs))
-            for doc in docs[0].docs:
-                print(f"image class is {doc.tags['class']}")
-                if doc.tags['class'] == '0':
-                    no_fire.append(doc)
-                else:
-                    fire.append(doc)
+            
+            try:
+                print('length of the docs is : ' , docs[0].docs)
+                for doc in docs[0].docs:
+                    print(f"image class is {doc.tags['class']}")
+                    if doc.tags['class'] == '0':
+                        no_fire.append(doc)
+                    else:
+                        fire.append(doc)
+            except Exception as err:
+                pass
 
         st.markdown('''
         
@@ -207,7 +210,8 @@ def main():
 
                 with cols[f'col{ind}']:
                     st.image(Image.fromarray(img_file.blob))
-                # st.image(Image.fromarray(img_file.blob))
+        
+        session_state.docs = None
 
     elif choice == "API documention":
         st.subheader("API documention :")
