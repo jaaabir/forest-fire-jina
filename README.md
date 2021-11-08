@@ -35,7 +35,7 @@ We have made this project to tackle this real-life problem using the state of th
 ### How to use:
 
 1. Download the code 
-2. Run flows.py
+2. Run flows.py ( use your own pre-trained model )
 3. Run app.py
 
 ### Prerequisties:
@@ -44,6 +44,7 @@ We have made this project to tackle this real-life problem using the state of th
 * Streamlit
 * Pillow
 * Tensorflow
+* Jina Ai
 
 
 ### Contributors:
