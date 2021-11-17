@@ -6,18 +6,17 @@ import cv2
 
 
 def Loadmodel():
-    # model_exp = tf.keras.models.load_model('model_dnet121.h5')
+    model_exp = tf.keras.models.load_model('exp_cnn.h5')
     print('''
     
-    ########################################################
+    ###################################################################################
     
-                USE YOUR OWN DL MODEL
+                USING THE EXPERIMENTAL MODEL DUE TO SECURITY REASONS
 
-    ########################################################
+    ###################################################################################
     
     
     ''')
-    model_exp = None
     return model_exp
 
 
